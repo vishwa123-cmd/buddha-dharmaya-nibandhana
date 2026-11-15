@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="si" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>බුද්ධ ධර්මය නිබන්ධන - ශ්‍යාමලී මිස්</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        saffron: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        },
+                        buddhist: {
+                            gold: '#D97706',
+                            blue: '#1E3A8A',
+                            dark: '#0F172A',
+                            cream: '#FFFBEB',
+                            soft: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter & Noto Sans Sinhala -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-full flex flex-col justify-between selection:bg-amber-100 selection:text-amber-900">
+
+    <div>
+        <!-- Header / Navigation -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm backdrop-blur-md bg-white/90">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-amber-100 border-2 border-amber-500 flex items-center justify-center text-amber-700 shadow-sm shrink-0">
+                        <i data-lucide="book-open" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-base sm:text-xl font-bold text-slate-900 tracking-tight truncate">බුද්ධ ධර්මය නිබන්ධන - ශ්‍යාමලී මිස්</h1>
+                        <p class="text-xs text-amber-700 font-semibold truncate">ඩබ්.ඒ.අයි.ශ්‍යාමලී</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+                    <button onclick="openNewDrawingModal()" class="inline-flex items-center gap-1.5 sm:gap-2 bg-amber-900 hover:bg-amber-950 text-amber-50 text-xs sm:text-sm font-medium px-3 sm:px-4 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-95">
+                        <i data-lucide="pen-tool" class="w-4 h-4 text-amber-300"></i>
+                        <span class="hidden sm:inline">නව සටහනක් අඳින්න (Draw)</span>
+                        <span class="sm:hidden">අඳින්න</span>
+                    </button>
+                    <button onclick="openUploadModal()" class="inline-flex items-center gap-1.5 sm:gap-2 bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-medium px-3 sm:px-4 py-2.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-95">
+                        <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">නිබන්ධනයක් එක් කරන්න</span>
+                        <span class="sm:hidden">එක් කරන්න</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search & Category Filter Bar -->
+        <section class="bg-gradient-to-b from-amber-50/70 to-slate-50 border-b border-amber-100/80 py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+                <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="searchInput" oninput="filterDocuments()" placeholder="නිබන්ධන නම හෝ පාඩම අනුව සොයන්න..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm shadow-2xs focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none">
+                    </div>
+
+                    <!-- Category Dropdown Sync -->
+                    <div class="w-full md:w-56">
+                        <select id="categoryFilter" onchange="setQuickCategory(this.value)" class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 shadow-2xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <option value="all">සියල්ල (All)</option>
+                            <option value="grade6-9">6-9 ශ්‍රේණි</option>
+                            <option value="grade10-11">10-11 ශ්‍රේණි (O/L)</option>
+                            <option value="pastpapers">ප්‍රශ්න පත්‍ර (Papers)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Category Filter Pills (Without දහම් පාසල්) -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="setQuickCategory('all')" data-cat="all" class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-white shadow-xs transition">
+                        සියල්ල (All)
+                    </button>
+                    <button onclick="setQuickCategory('grade6-9')" data-cat="grade6-9" class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 transition">
+                        6-9 ශ්‍රේණි
+                    </button>
+                    <button onclick="setQuickCategory('grade10-11')" data-cat="grade10-11" class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 transition">
+                        10-11 ශ්‍රේණි (O/L)
+                    </button>
+                    <button onclick="setQuickCategory('pastpapers')" data-cat="pastpapers" class="filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 transition">
+                        ප්‍රශ්න පත්‍ර (Papers)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+
+                <!-- Left Column: Teacher Info & Quick Category Filters -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Teacher Profile Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-500 to-yellow-500"></div>
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-amber-50 border-2 border-amber-200 flex items-center justify-center text-amber-700 shadow-inner text-2xl font-bold">
+                            ශ්‍යා
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-lg">ඩබ්.ඒ.අයි.ශ්‍යාමලී</h3>
+                        <p class="text-xs text-amber-700 font-medium mb-3">බුද්ධ ධර්මය ගුරුතුමිය</p>
+                        <div class="border-t border-slate-100 pt-4 text-left space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="mail" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                                <a href="mailto:shyamaliinoka81@gmail.com" class="hover:text-amber-700 transition truncate text-[11px]">shyamaliinoka81@gmail.com</a>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="phone" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                                <a href="tel:0726293047" class="hover:text-amber-700 transition text-[11px]">0726293047 / 0704324493</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Category Filter Card (Without දහම් පාසල්) -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="layers" class="w-4 h-4 text-amber-600"></i>
+                            <span>කාණ්ඩ අනුව තෝරන්න</span>
+                        </h4>
+                        <div class="space-y-1.5 text-xs">
+                            <button onclick="setQuickCategory('all')" class="quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium bg-amber-50 text-amber-800 border border-amber-200 transition flex items-center justify-between" data-cat="all">
+                                <span>සියල්ල (All)</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="setQuickCategory('grade6-9')" class="quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium text-slate-600 hover:bg-slate-50 border border-transparent transition flex items-center justify-between" data-cat="grade6-9">
+                                <span>6-9 ශ්‍රේණි</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50"></i>
+                            </button>
+                            <button onclick="setQuickCategory('grade10-11')" class="quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium text-slate-600 hover:bg-slate-50 border border-transparent transition flex items-center justify-between" data-cat="grade10-11">
+                                <span>10-11 ශ්‍රේණි (O/L)</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50"></i>
+                            </button>
+                            <button onclick="setQuickCategory('pastpapers')" class="quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium text-slate-600 hover:bg-slate-50 border border-transparent transition flex items-center justify-between" data-cat="pastpapers">
+                                <span>ප්‍රශ්න පත්‍ර (Papers)</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Document Grid List -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">සියලුම නිබන්ධන</h3>
+                            <p class="text-xs text-slate-500" id="docCountText">ගොනු 4 ක් පෙන්වයි</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                            <span>පෙළගැස්ම:</span>
+                            <span class="font-semibold text-slate-700">නවතම (Newest)</span>
+                        </div>
+                    </div>
+
+                    <!-- Documents Grid Container -->
+                    <div id="documentGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Rendered dynamically via JS -->
+                    </div>
+
+                    <!-- Empty State (Hidden by default) -->
+                    <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
+                        <div class="w-16 h-16 mx-auto mb-3 text-slate-300 flex items-center justify-center">
+                            <i data-lucide="folder-open" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-base font-semibold text-slate-700">කිසිදු නිබන්ධනයක් හමු නොවීය</h4>
+                        <p class="text-xs text-slate-500 mt-1">කරුණාකර වෙනත් නමකින් හෝ කාණ්ඩයකින් සෙවුම් කරන්න.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 transform transition-all max-h-[92vh] overflow-y-auto">
+            <div class="bg-amber-600 px-6 py-4 flex items-center justify-between text-white sticky top-0 z-10">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                    <h3 class="font-bold text-base">නව නිබන්ධනයක් එකතු කරන්න</h3>
+                </div>
+                <button onclick="closeUploadModal()" class="text-amber-100 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">නිබන්ධනයේ නම (Title) *</label>
+                    <input type="text" id="docTitle" required placeholder="උදා: ආර්ය අෂ්ඨාංගික මාර්ගය - සටහන්" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">කාණ්ඩය (Category) *</label>
+                        <select id="docCategory" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                            <option value="grade6-9">6-9 ශ්‍රේණි</option>
+                            <option value="grade10-11">10-11 ශ්‍රේණි (O/L)</option>
+                            <option value="pastpapers">ප්‍රශ්න පත්‍ර (Papers)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">ගොනු වර්ගය (File Type)</label>
+                        <select id="docType" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                            <option value="pdf">PDF Document (.pdf)</option>
+                            <option value="word">Word Document (.docx / .doc)</option>
+                            <option value="ppt">PowerPoint (.pptx)</option>
+                            <option value="txt">Text Document (.txt)</option>
+                            <option value="image">Image / Photo (.jpg/.png)</option>
+                            <option value="note">Study Note / Whiteboard (.note)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">විස්තරය (Description)</label>
+                    <textarea id="docDesc" rows="2" placeholder="මෙම නිබන්ධනය පිළිබඳ කෙටි සටහනක්..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">අමතර සටහන් / පාඩම් අන්තර්ගතය (Study Content - Optional)</label>
+                    <textarea id="docContent" rows="3" placeholder="පාඩමේ වැදගත් කරුණු මෙහි ලියන්න..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ගොනුව අමුණන්න (Upload File / Document - Optional for Text Notes)</label>
+                    <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 text-center hover:border-amber-500 transition cursor-pointer bg-slate-50 relative">
+                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.png,.jpg,.jpeg" onchange="updateFileName(this)" class="absolute inset-0 opacity-0 cursor-pointer">
+                        <div class="space-y-1" id="fileUploadPrompt">
+                            <i data-lucide="file-up" class="w-8 h-8 mx-auto text-amber-600"></i>
+                            <p class="text-xs font-medium text-slate-700">ගොනුව මෙහි අදින්න හෝ ක්ලික් කර තෝරන්න</p>
+                            <p class="text-[10px] text-slate-400">PDF, DOC, DOCX, PPTX, TXT, JPG, PNG (උපරිම 25MB)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeUploadModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-medium hover:bg-slate-100 transition">
+                        අවලංගු කරන්න
+                    </button>
+                    <button type="submit" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-xs font-semibold hover:bg-amber-700 shadow-md transition flex items-center gap-1.5">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>උඩුගත කරන්න (Upload)</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Drawing Note Modal -->
+    <div id="newDrawingModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 transform transition-all">
+            <div class="bg-amber-900 px-6 py-4 flex items-center justify-between text-white">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="pen-tool" class="w-5 h-5 text-amber-300"></i>
+                    <h3 class="font-bold text-base">නව චිත්‍ර හා සටහන් පුවරුවක්</h3>
+                </div>
+                <button onclick="closeNewDrawingModal()" class="text-amber-200 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="newDrawingForm" onsubmit="handleCreateDrawingNote(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">සටහනේ නම (Title) *</label>
+                    <input type="text" id="drawNoteTitle" required value="නව චිත්‍ර හා සටහන් පත්‍රිකාව" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">කාණ්ඩය (Category) *</label>
+                    <select id="drawNoteCategory" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                        <option value="grade6-9">6-9 ශ්‍රේණි</option>
+                        <option value="grade10-11">10-11 ශ්‍රේණි (O/L)</option>
+                        <option value="pastpapers">ප්‍රශ්න පත්‍ර (Papers)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">විස්තරය (Description)</label>
+                    <input type="text" id="drawNoteDesc" placeholder="කෙටි සටහනක්..." value="ශ්‍යාමලී මිස් විසින් අඳින ලද පාඩම් සටහන" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeNewDrawingModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-medium hover:bg-slate-100 transition">
+                        අවලංගු කරන්න
+                    </button>
+                    <button type="submit" class="px-5 py-2 bg-amber-900 text-amber-50 rounded-xl text-xs font-semibold hover:bg-amber-950 shadow-md transition flex items-center gap-1.5">
+                        <i data-lucide="pen-tool" class="w-4 h-4 text-amber-300"></i>
+                        <span>චිත්‍ර පුවරුව අරඹන්න</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rename & Edit Document Modal -->
+    <div id="editModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 transform transition-all max-h-[92vh] overflow-y-auto">
+            <div class="bg-amber-900 px-6 py-4 flex items-center justify-between text-white sticky top-0 z-10">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-5 h-5 text-amber-300"></i>
+                    <h3 class="font-bold text-base">නිබන්ධනය සංස්කරණය / නම වෙනස් කිරීම</h3>
+                </div>
+                <button onclick="closeEditModal()" class="text-amber-200 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="editForm" onsubmit="handleEditSubmit(event)" class="p-6 space-y-4">
+                <input type="hidden" id="editDocId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">මාතෘකාව / නව නම (Rename Title) *</label>
+                    <input type="text" id="editDocTitle" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ශ්‍රේණිය / අංශය (Category) *</label>
+                    <select id="editDocCategory" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                        <option value="grade6-9">6-9 ශ්‍රේණි</option>
+                        <option value="grade10-11">10-11 ශ්‍රේණි (O/L)</option>
+                        <option value="pastpapers">ප්‍රශ්න පත්‍ර (Papers)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">කෙටි විස්තරය (Description)</label>
+                    <textarea id="editDocDesc" rows="2" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">පාඩම් සටහන් / අන්තර්ගතය (Editable Study Notes)</label>
+                    <textarea id="editDocContent" rows="5" placeholder="නිබන්ධනයේ සටහන් මෙහි සංස්කරණය කරන්න..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-medium hover:bg-slate-100 transition">
+                        අවලංගු කරන්න
+                    </button>
+                    <button type="submit" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-xs font-semibold hover:bg-amber-700 shadow-md transition flex items-center gap-1.5">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>වෙනස්කම් සුරකින්න (Save)</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Interactive Document Workspace: Preview, Edit & Drawing Studio Modal -->
+    <div id="previewModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden border border-slate-200">
+            <!-- Top Workspace Bar -->
+            <div class="bg-amber-950 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-2 text-white shrink-0">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <i data-lucide="file-text" class="w-5 h-5 text-amber-400 shrink-0"></i>
+                    <div class="min-w-0">
+                        <h3 id="previewTitle" class="font-bold text-sm sm:text-base truncate max-w-xs sm:max-w-md">ගොනු පෙරදසුන</h3>
+                        <p id="previewCategory" class="text-[11px] text-amber-200/80">කාණ්ඩය</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openEditFromPreview()" class="px-3 py-1.5 bg-amber-800/80 hover:bg-amber-700 text-amber-100 rounded-xl text-xs font-medium transition flex items-center gap-1.5 border border-amber-700/50">
+                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                        <span>නම / සටහන් සංස්කරණය</span>
+                    </button>
+                    <button id="toggleDrawBtn" onclick="toggleDrawingMode()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-amber-950 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i>
+                        <span id="toggleDrawText">අඳින්න / සලකුණු කරන්න (Draw)</span>
+                    </button>
+                    <button onclick="closePreviewModal()" class="text-amber-200 hover:text-white p-1.5 rounded-lg ml-1">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Drawing Toolbar (Shown when Drawing Mode is Active) -->
+            <div id="drawingToolbar" class="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 shrink-0 hidden">
+                <!-- Tools -->
+                <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-amber-200 shadow-2xs">
+                    <button onclick="setDrawTool('pen')" id="tool-pen" class="draw-tool-btn active px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 bg-amber-600 text-white" title="පෑන (Pen)">
+                        <i data-lucide="pen" class="w-3.5 h-3.5"></i>
+                        <span class="hidden md:inline">පෑන</span>
+                    </button>
+                    <button onclick="setDrawTool('highlighter')" id="tool-highlighter" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="හයිලයිටරය (Highlighter)">
+                        <i data-lucide="highlighter" class="w-3.5 h-3.5"></i>
+                        <span class="hidden md:inline">හයිලයිට්</span>
+                    </button>
+                    <button onclick="setDrawTool('line')" id="tool-line" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="රේඛාව (Line)">
+                        <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="setDrawTool('arrow')" id="tool-arrow" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="ඊතලය (Arrow)">
+                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="setDrawTool('rect')" id="tool-rect" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="සෘජුකෝණාස්‍රය (Rectangle)">
+                        <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="setDrawTool('circle')" id="tool-circle" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="වෘත්තය (Circle)">
+                        <i data-lucide="circle" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="setDrawTool('text')" id="tool-text" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="අකුරු එක් කරන්න (Text)">
+                        <i data-lucide="type" class="w-3.5 h-3.5"></i>
+                        <span class="hidden md:inline">අකුරු</span>
+                    </button>
+                    <button onclick="setDrawTool('eraser')" id="tool-eraser" class="draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50" title="මකනය (Eraser)">
+                        <i data-lucide="eraser" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Colors & Stroke Width -->
+                <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-xl border border-amber-200 shadow-2xs">
+                    <div class="flex items-center gap-1" id="colorPalette">
+                        <button onclick="setDrawColor('#0F172A')" class="color-swatch w-5 h-5 rounded-full bg-slate-900 ring-2 ring-offset-1 ring-amber-500" data-color="#0F172A" title="කළු"></button>
+                        <button onclick="setDrawColor('#78350F')" class="color-swatch w-5 h-5 rounded-full bg-amber-900" data-color="#78350F" title="දුඹුරු"></button>
+                        <button onclick="setDrawColor('#D97706')" class="color-swatch w-5 h-5 rounded-full bg-amber-500" data-color="#D97706" title="රන්වන්"></button>
+                        <button onclick="setDrawColor('#DC2626')" class="color-swatch w-5 h-5 rounded-full bg-red-600" data-color="#DC2626" title="රතු"></button>
+                        <button onclick="setDrawColor('#2563EB')" class="color-swatch w-5 h-5 rounded-full bg-blue-600" data-color="#2563EB" title="නිල්"></button>
+                        <button onclick="setDrawColor('#059669')" class="color-swatch w-5 h-5 rounded-full bg-emerald-600" data-color="#059669" title="කොළ"></button>
+                    </div>
+                    <div class="h-4 w-px bg-slate-200 mx-0.5"></div>
+                    <div class="flex items-center gap-1.5 text-[11px] text-slate-600">
+                        <i data-lucide="circle-dot" class="w-3.5 h-3.5 text-amber-700"></i>
+                        <input type="range" id="strokeWidthSlider" min="1" max="24" value="3" oninput="setStrokeWidth(this.value)" class="w-16 accent-amber-600 cursor-pointer" title="ප්‍රමාණය">
+                    </div>
+                </div>
+
+                <!-- Canvas Actions -->
+                <div class="flex items-center gap-1.5">
+                    <button onclick="undoCanvas()" class="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl text-xs font-medium flex items-center gap-1" title="ආපසු (Undo)">
+                        <i data-lucide="undo-2" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">ආපසු</span>
+                    </button>
+                    <button onclick="clearCanvas()" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 rounded-xl text-xs font-medium flex items-center gap-1" title="මකා දමන්න (Clear)">
+                        <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">මකන්න</span>
+                    </button>
+                    <button onclick="saveCanvasAnnotation()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-xs">
+                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                        <span>චිත්‍රය සුරකින්න</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Document Content & Interactive Canvas Stage -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-100">
+                <div id="workspaceStage" class="relative mx-auto max-w-3xl bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden min-h-[420px]">
+                    <!-- Underlying Document Content Layer -->
+                    <div id="documentLayer" class="p-6 sm:p-8 space-y-5 select-none">
+                        <div class="flex items-start justify-between border-b border-amber-100 pb-4">
+                            <div>
+                                <span class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 mb-1.5">බුද්ධ ධර්මය නිබන්ධන • ඩබ්.ඒ.අයි.ශ්‍යාමලී</span>
+                                <h4 id="previewDocName" class="font-bold text-slate-900 text-lg sm:text-xl">නිබන්ධන නම</h4>
+                                <p id="previewDocDesc" class="text-xs sm:text-sm text-slate-500 mt-1"></p>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Media or Study Text Area -->
+                        <div id="previewMediaContainer" class="space-y-4">
+                            <!-- Filled via JS: Image preview, PDF frame, or formatted Sinhala study notes -->
+                        </div>
+                    </div>
+
+                    <!-- Transparent Interactive Drawing & Annotation Overlay Canvas -->
+                    <canvas id="annotationCanvas" class="absolute inset-0 w-full h-full pointer-events-none touch-none"></canvas>
+
+                    <!-- Inline Floating Text Input for Canvas Text Tool -->
+                    <div id="canvasTextBox" class="absolute hidden z-20 flex items-center gap-1 bg-white p-1.5 rounded-xl shadow-lg border-2 border-amber-500">
+                        <input type="text" id="canvasTextInput" placeholder="මෙහි ලියන්න..." class="text-sm px-2 py-1 focus:outline-none min-w-[160px] text-slate-900 font-medium">
+                        <button onclick="commitCanvasText()" class="px-2.5 py-1 bg-amber-600 text-white rounded-lg text-xs font-bold hover:bg-amber-700">එක් කරන්න</button>
+                        <button onclick="cancelCanvasText()" class="p-1 text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="bg-white border-t border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
+                    <span>ඉහත "අඳින්න / සලකුණු කරන්න" බොත්තම ඔබා නිබන්ධනය මත පෑනෙන් හෝ හයිලයිටරයෙන් සටහන් තැබිය හැක.</span>
+                </div>
+                <div class="flex items-center gap-2.5 ml-auto">
+                    <button onclick="downloadAnnotatedPNG()" class="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i data-lucide="image-down" class="w-4 h-4"></i>
+                        <span>සටහන් සමඟ PNG ලෙස බාගන්න</span>
+                    </button>
+                    <button id="previewDownloadBtn" onclick="downloadCurrentDoc()" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-xs font-semibold hover:bg-amber-700 shadow-md flex items-center gap-1.5">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>ගොනුව බාගත කරන්න</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal (No native confirm/alert) -->
+    <div id="deleteModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4 border border-slate-100 text-center">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center">
+                <i data-lucide="trash-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base">නිබන්ධනය ඉවත් කරන්නද?</h4>
+                <p id="deleteDocTitleText" class="text-xs text-slate-500 mt-1">මෙම ගොනුව ස්ථිරවම ඉවත් වනු ඇත.</p>
+            </div>
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-medium hover:bg-slate-100">
+                    අවලංගු කරන්න
+                </button>
+                <button onclick="confirmDeleteDoc()" class="px-4 py-2 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-700 shadow-sm">
+                    ඔව්, ඉවත් කරන්න
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div id="toastIcon" class="text-amber-400">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+            <h5 id="toastTitle" class="text-xs font-bold">සාර්ථකයි!</h5>
+            <p id="toastMessage" class="text-[11px] text-slate-300">ගොනුව සාර්ථකව එකතු කරන ලදී.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 බුද්ධ ධර්මය නිබන්ධන - ඩබ්.ඒ.අයි.ශ්‍යාමලී මිස්. සියලු හිමිකම් ඇවිරිණි.</p>
+            <div class="flex flex-wrap items-center justify-center gap-3 text-slate-600 pt-1">
+                <span class="inline-flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5 text-amber-600"></i> shyamaliinoka81@gmail.com</span>
+                <span>•</span>
+                <span class="inline-flex items-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5 text-amber-600"></i> 0726293047 / 0704324493</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Initial Mock Document Database with LocalStorage Support (Only 6-9, 10-11 O/L, and Papers)
+        let defaultDocuments = [
+            {
+                id: 1,
+                title: "පැරණි බෞද්ධ ඉතිහාසය සහ ත්‍රිපිටක සටහන්",
+                category: "grade10-11",
+                type: "pdf",
+                size: "2.4 MB",
+                date: "2026-03-28",
+                desc: "10 සහ 11 ශ්‍රේණි සඳහා විශේෂයි. ත්‍රිපිටක සංගායනා සහ බෞද්ධ ඉතිහාසය පිළිබඳ සම්පූර්ණ සටහන.",
+                content: "1. ප්‍රථම ධර්ම සංගායනාව:\n• පැවැත්වූ ස්ථානය: රජගහනුවර වේභාර පර්වත ප්‍රාන්තයේ සප්තපර්ණී ගුහා ද්වාරය.\n• මූලිකත්වය: මහා කාශ්‍යප මහරහතන් වහන්සේ.\n• රාජ්‍ය අනුග්‍රහය: අජාසත්ත මහරජතුමා.\n\n2. ත්‍රිපිටකය:\n• විනය පිටකය\n• සූත්‍ර පිටකය\n• අභිධර්ම පිටකය",
+                drawingData: null
+            },
+            {
+                id: 2,
+                title: "ආර්ය අෂ්ඨාංගික මාර්ගය - විවරණ පත්‍රිකාව",
+                category: "grade10-11",
+                type: "word",
+                size: "1.1 MB",
+                date: "2026-03-24",
+                desc: "සිල්, සමාධි, ප්‍රඥා යන ත්‍රිවිධ ශික්ෂාව යටතේ ආර්ය අෂ්ඨාංගික මාර්ගය පැහැදිලි කිරීම.",
+                content: "ආර්ය අෂ්ඨාංගික මාර්ගය (මධ්‍යම ප්‍රතිපදාව):\n1. සම්මා දිට්ඨි (නිවැරදි දැකීම)\n2. සම්මා සංකප්ප (නිවැරදි කල්පනාව)\n3. සම්මා වාචා (නිවැරදි වචනය)\n4. සම්මා කම්මන්ත (නිවැරදි කර්මාන්ත)\n5. සම්මා ආජීව (නිවැරදි දිවිපැවැත්ම)\n6. සම්මා වායාම (නිවැරදි වෑයම)\n7. සම්මා සති (නිවැරදි සිහිය)\n8. සම්මා සමාධි (නිවැරදි සමාධිය)",
+                drawingData: null
+            },
+            {
+                id: 4,
+                title: "පන්සිල් හා දස අකුසල කර්ම - පුනරීක්ෂණය",
+                category: "grade6-9",
+                type: "ppt",
+                size: "3.8 MB",
+                date: "2026-03-15",
+                desc: "6 සිට 9 ශ්‍රේණි දරුවන් සඳහා සරල සිංහලෙන් සකස් කරන ලද පුනරීක්ෂණ සටහන්.",
+                content: "පංච ශීලය:\n1. පාණාතිපාතා වේරමණී සික්ඛාපදං සමාදියාමි.\n2. අදින්නාදානා වේරමණී සික්ඛාපදං සමාදියාමි.\n3. කාමේසු මිච්ඡාචාරා වේරමණී සික්ඛාපදං සමාදියාමි.\n4. මුසාවාදා වේරමණී සික්ඛාපදං සමාදියාමි.\n5. සුරාමේරය මජ්ජපමාදට්ඨානා වේරමණී සික්ඛාපදං සමාදියාමි.",
+                drawingData: null
+            },
+            {
+                id: 5,
+                title: "සාමාන්‍ය පෙළ පුනරීක්ෂණ ප්‍රශ්න මාලාව 01",
+                category: "pastpapers",
+                type: "pdf",
+                size: "2.0 MB",
+                date: "2026-03-10",
+                desc: "O/L බුද්ධ ධර්මය ප්‍රශ්න පත්‍ර සඳහා සූදානම් වීමට ආදර්ශ ප්‍රශ්න පත්‍රයක්.",
+                content: "සාමාන්‍ය පෙළ පුනරීක්ෂණ අභ්‍යාස:\n• චතුරාර්ය සත්‍යය නම් කර කෙටියෙන් හඳුන්වන්න.\n• සතර බ්‍රහ්ම විහරණ මොනවාද?\n• පටිච්චසමුප්පාද ධර්මයේ මූලික සිද්ධාන්තය ලියන්න.",
+                drawingData: null
+            }
+        ];
+
+        let documents = [];
+        let activeDocId = null;
+        let pendingDeleteId = null;
+
+        // Drawing Studio State
+        let isDrawingMode = false;
+        let currentTool = 'pen';
+        let currentColor = '#0F172A';
+        let currentStrokeWidth = 3;
+        let isMouseDown = false;
+        let startX = 0;
+        let startY = 0;
+        let canvasHistory = [];
+        let snapshotBeforeShape = null;
+        let pendingTextCoords = { x: 0, y: 0 };
+
+        // Normalize legacy categories (including migrating any 'dhamma' / 'දහම් පාසල්' entries)
+        function normalizeCategory(cat) {
+            if (cat === 'grade6-8' || cat === 'grade6-9') return 'grade6-9';
+            if (cat === 'grade9-11' || cat === 'grade10-11') return 'grade10-11';
+            if (cat === 'pastpapers') return 'pastpapers';
+            // Migrate any stored 'dhamma' / 'දහම් පාසල්' documents to 'grade6-9'
+            return 'grade6-9';
+        }
+
+        // Load documents from LocalStorage or Fallback to Default
+        function loadDocuments() {
+            const saved = localStorage.getItem('shyamalee_dhamma_docs');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    let migrated = false;
+                    documents = parsed.map(doc => {
+                        const normalized = normalizeCategory(doc.category);
+                        if (normalized !== doc.category) {
+                            migrated = true;
+                        }
+                        return { ...doc, category: normalized };
+                    });
+                    if (migrated) {
+                        saveDocuments();
+                    }
+                } catch(e) {
+                    documents = defaultDocuments;
+                }
+            } else {
+                documents = defaultDocuments;
+                saveDocuments();
+            }
+        }
+
+        function saveDocuments() {
+            try {
+                localStorage.setItem('shyamalee_dhamma_docs', JSON.stringify(documents));
+            } catch (e) {
+                showToast("අවවාදයයි", "ගබඩා ඉඩ සීමිත බැවින් ඇතැම් විශාල රූප සුරැකීමට නොහැකි විය.");
+            }
+        }
+
+        // Initialize Lucide Icons on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDocuments();
+            lucide.createIcons();
+            renderDocuments(documents);
+            initCanvasEvents();
+        });
+
+        // Quick Category Filter Sync (Pills, Sidebar, and Select Dropdown)
+        function setQuickCategory(cat) {
+            const selectEl = document.getElementById('categoryFilter');
+            if (selectEl) selectEl.value = cat;
+
+            document.querySelectorAll('.quick-cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium bg-amber-50 text-amber-800 border border-amber-200 transition flex items-center justify-between";
+                } else {
+                    btn.className = "quick-cat-btn w-full text-left px-3 py-2 rounded-xl font-medium text-slate-600 hover:bg-slate-50 border border-transparent transition flex items-center justify-between";
+                }
+            });
+
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                if (pill.dataset.cat === cat) {
+                    pill.className = "filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-white shadow-xs transition";
+                } else {
+                    pill.className = "filter-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 transition";
+                }
+            });
+
+            filterDocuments();
+        }
+
+        // Render Document Cards
+        function renderDocuments(docsToRender) {
+            const grid = document.getElementById('documentGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countText = document.getElementById('docCountText');
+
+            grid.innerHTML = '';
+            countText.innerText = `ගොනු ${docsToRender.length} ක් පෙන්වයි`;
+
+            if (docsToRender.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            docsToRender.forEach(doc => {
+                const cat = normalizeCategory(doc.category);
+                let badgeColor = 'bg-amber-100 text-amber-800';
+                let categoryName = getCategoryLabel(cat);
+                if (cat === 'grade6-9') { badgeColor = 'bg-blue-100 text-blue-800'; }
+                else if (cat === 'grade10-11') { badgeColor = 'bg-amber-100 text-amber-800'; }
+                else if (cat === 'pastpapers') { badgeColor = 'bg-purple-100 text-purple-800'; }
+
+                let iconName = 'file-text';
+                let iconBg = 'bg-amber-50 text-amber-600 border-amber-200';
+                if(doc.type === 'pdf') { iconName = 'file-text'; iconBg = 'bg-rose-50 text-rose-600 border-rose-200'; }
+                else if(doc.type === 'word') { iconName = 'file-type'; iconBg = 'bg-blue-50 text-blue-600 border-blue-200'; }
+                else if(doc.type === 'ppt') { iconName = 'presentation'; iconBg = 'bg-orange-50 text-orange-600 border-orange-200'; }
+                else if(doc.type === 'txt') { iconName = 'file-code'; iconBg = 'bg-slate-100 text-slate-700 border-slate-300'; }
+                else if(doc.type === 'image') { iconName = 'image'; iconBg = 'bg-emerald-50 text-emerald-600 border-emerald-200'; }
+                else if(doc.type === 'note') { iconName = 'pen-tool'; iconBg = 'bg-amber-100 text-amber-800 border-amber-300'; }
+
+                const hasDrawingBadge = doc.drawingData ? `<span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800" title="චිත්‍ර/සටහන් ඇතුළත් කර ඇත"><i data-lucide="pen-tool" class="w-2.5 h-2.5"></i> සටහන් ඇත</span>` : '';
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="w-11 h-11 rounded-xl ${iconBg} border flex items-center justify-center shrink-0">
+                                <i data-lucide="${iconName}" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-end gap-1.5">
+                                ${hasDrawingBadge}
+                                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${badgeColor}">${categoryName}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm group-hover:text-amber-700 transition line-clamp-1">${doc.title}</h4>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${doc.desc}</p>
+                        </div>
+                    </div>
+                    <div class="pt-3.5 mt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                        <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                            <span>${doc.size}</span>
+                            <span>•</span>
+                            <span>${doc.date}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="openPreview(${doc.id}, false)" class="p-1.5 text-slate-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition" title="පෙරදසුන (Preview)">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="openPreview(${doc.id}, true)" class="p-1.5 text-amber-700 hover:text-amber-900 hover:bg-amber-100 rounded-lg transition" title="අඳින්න / සලකුණු කරන්න (Annotate & Draw)">
+                                <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="openEditModal(${doc.id})" class="p-1.5 text-slate-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition" title="නම / සටහන් සංස්කරණය (Rename & Edit)">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="downloadDoc(${doc.id})" class="px-2.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium shadow-xs transition flex items-center gap-1" title="බාගත කරන්න">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                <span>බාගත</span>
+                            </button>
+                            <button onclick="requestDeleteDoc(${doc.id})" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" title="මකන්න (Delete)">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Filter and Search Logic
+        function filterDocuments() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+
+            const filtered = documents.filter(doc => {
+                const matchesQuery = doc.title.toLowerCase().includes(query) ||
+                                     doc.desc.toLowerCase().includes(query) ||
+                                     (doc.content && doc.content.toLowerCase().includes(query));
+                const matchesCategory = category === 'all' || normalizeCategory(doc.category) === category;
+                return matchesQuery && matchesCategory;
+            });
+
+            renderDocuments(filtered);
+        }
+
+        // Upload Modal Controls
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileUploadPrompt').innerHTML = `
+                <i data-lucide="file-up" class="w-8 h-8 mx-auto text-amber-600"></i>
+                <p class="text-xs font-medium text-slate-700">ගොනුව මෙහි අදින්න හෝ ක්ලික් කර තෝරන්න</p>
+                <p class="text-[10px] text-slate-400">PDF, DOC, DOCX, PPTX, TXT, JPG, PNG (උපරිම 25MB)</p>
+            `;
+            lucide.createIcons();
+        }
+
+        function updateFileName(input) {
+            if (input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                document.getElementById('fileUploadPrompt').innerHTML = `
+                    <i data-lucide="check-circle-2" class="w-8 h-8 mx-auto text-emerald-600"></i>
+                    <p class="text-xs font-bold text-slate-800">${fileName}</p>
+                    <p class="text-[10px] text-emerald-600 font-medium">ගොනුව තෝරාගන්නා ලදී (File Ready)</p>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        // Handle Upload Submission
+        function handleUploadSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('docTitle').value;
+            const category = normalizeCategory(document.getElementById('docCategory').value);
+            const type = document.getElementById('docType').value;
+            const desc = document.getElementById('docDesc').value;
+            const content = document.getElementById('docContent').value;
+            const fileInput = document.getElementById('fileInput');
+
+            const finalizeAdd = (fileSize, fileDataUrl, fileName, extractedText) => {
+                const newDoc = {
+                    id: Date.now(),
+                    title: title,
+                    category: category,
+                    type: type,
+                    size: fileSize,
+                    date: new Date().toISOString().split('T')[0],
+                    desc: desc || "ඩබ්.ඒ.අයි.ශ්‍යාමලී මිස් විසින් උඩුගත කරන ලද අධ්‍යාපනික සටහනකි.",
+                    content: content || extractedText || (fileName ? `අමුණන ලද ගොනුව: ${fileName}` : "මෙම නිබන්ධනය මත සටහන් එක් කිරීමට 'සංස්කරණය' හෝ 'අඳින්න' බොත්තම භාවිතා කරන්න."),
+                    fileDataUrl: fileDataUrl || null,
+                    fileName: fileName || null,
+                    drawingData: null
+                };
+
+                documents.unshift(newDoc);
+                saveDocuments();
+                filterDocuments();
+                closeUploadModal();
+                showToast("සාර්ථකයි!", "නිබන්ධනය සාර්ථකව එකතු කරන ලදී.");
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const fileSize = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+                if (file.type.startsWith('image/') && file.size < 3 * 1024 * 1024) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => finalizeAdd(fileSize, ev.target.result, file.name, null);
+                    reader.readAsDataURL(file);
+                } else if (file.type === 'text/plain' && file.size < 1024 * 1024) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => finalizeAdd(fileSize, null, file.name, ev.target.result);
+                    reader.readAsText(file);
+                } else if (file.size < 3 * 1024 * 1024) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => finalizeAdd(fileSize, ev.target.result, file.name, null);
+                    reader.readAsDataURL(file);
+                } else {
+                    finalizeAdd(fileSize, null, file.name, null);
+                }
+            } else {
+                finalizeAdd("0.2 MB", null, null, null);
+            }
+        }
+
+        // New Drawing Note Modal Controls
+        function openNewDrawingModal() {
+            document.getElementById('newDrawingModal').classList.remove('hidden');
+        }
+
+        function closeNewDrawingModal() {
+            document.getElementById('newDrawingModal').classList.add('hidden');
+        }
+
+        function handleCreateDrawingNote(e) {
+            e.preventDefault();
+            const title = document.getElementById('drawNoteTitle').value.trim() || "නව චිත්‍ර හා සටහන් පත්‍රිකාව";
+            const category = normalizeCategory(document.getElementById('drawNoteCategory').value);
+            const desc = document.getElementById('drawNoteDesc').value.trim() || "ඩබ්.ඒ.අයි.ශ්‍යාමලී මිස් විසින් අඳින ලද පාඩම් සටහන";
+
+            const newDoc = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                type: "note",
+                size: "0.5 MB",
+                date: new Date().toISOString().split('T')[0],
+                desc: desc,
+                content: "",
+                drawingData: null
+            };
+            documents.unshift(newDoc);
+            saveDocuments();
+            filterDocuments();
+            closeNewDrawingModal();
+            openPreview(newDoc.id, true);
+            showToast("චිත්‍ර පුවරුව සූදානම්", "ඔබට දැන් නිදහසේ ඇඳීමට සහ නම වෙනස් කිරීමට හැක.");
+        }
+
+        // Rename & Edit Modal Controls
+        function openEditModal(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            document.getElementById('editDocId').value = doc.id;
+            document.getElementById('editDocTitle').value = doc.title;
+            document.getElementById('editDocCategory').value = normalizeCategory(doc.category);
+            document.getElementById('editDocDesc').value = doc.desc || '';
+            document.getElementById('editDocContent').value = doc.content || '';
+
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function openEditFromPreview() {
+            if (activeDocId) {
+                openEditModal(activeDocId);
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        function handleEditSubmit(e) {
+            e.preventDefault();
+            const id = Number(document.getElementById('editDocId').value);
+            const docIndex = documents.findIndex(d => d.id === id);
+            if (docIndex === -1) return;
+
+            documents[docIndex].title = document.getElementById('editDocTitle').value.trim();
+            documents[docIndex].category = normalizeCategory(document.getElementById('editDocCategory').value);
+            documents[docIndex].desc = document.getElementById('editDocDesc').value.trim();
+            documents[docIndex].content = document.getElementById('editDocContent').value;
+
+            saveDocuments();
+            filterDocuments();
+            closeEditModal();
+
+            // Refresh open preview modal if active
+            if (activeDocId === id && !document.getElementById('previewModal').classList.contains('hidden')) {
+                renderPreviewStage(documents[docIndex]);
+            }
+
+            showToast("යාවත්කාලීන විය!", "නිබන්ධනයේ නම සහ සටහන් සාර්ථකව සුරකින ලදී.");
+        }
+
+        // Delete Document Confirmation Modal
+        function requestDeleteDoc(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+            pendingDeleteId = id;
+            document.getElementById('deleteDocTitleText').innerText = `"${doc.title}" ස්ථිරවම ඉවත් කිරීමට අවශ්‍යද?`;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            pendingDeleteId = null;
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+
+        function confirmDeleteDoc() {
+            if (pendingDeleteId !== null) {
+                documents = documents.filter(d => d.id !== pendingDeleteId);
+                saveDocuments();
+                filterDocuments();
+                showToast("ඉවත් කරන ලදී", "නිබන්ධනය සාර්ථකව ඉවත් කරන ලදී.");
+            }
+            closeDeleteModal();
+        }
+
+        // Preview & Interactive Drawing Workspace Controls
+        function getCategoryLabel(cat) {
+            const normalized = normalizeCategory(cat);
+            if (normalized === 'grade6-9') return '6-9 ශ්‍රේණි';
+            if (normalized === 'grade10-11') return '10-11 ශ්‍රේණි (O/L)';
+            if (normalized === 'pastpapers') return 'ප්‍රශ්න පත්‍ර (Papers)';
+            return '6-9 ශ්‍රේණි';
+        }
+
+        function renderPreviewStage(doc) {
+            document.getElementById('previewTitle').innerText = doc.title;
+            document.getElementById('previewCategory').innerText = `${getCategoryLabel(doc.category)} • ${doc.size} • ${doc.date}`;
+            document.getElementById('previewDocName').innerText = doc.title;
+            document.getElementById('previewDocDesc').innerText = doc.desc || '';
+
+            const mediaContainer = document.getElementById('previewMediaContainer');
+            mediaContainer.innerHTML = '';
+
+            if (doc.fileDataUrl && doc.fileDataUrl.startsWith('data:image/')) {
+                const img = document.createElement('img');
+                img.src = doc.fileDataUrl;
+                img.alt = doc.title;
+                img.className = "max-w-full h-auto rounded-xl border border-slate-200 mx-auto";
+                mediaContainer.appendChild(img);
+            } else if (doc.fileDataUrl && doc.fileDataUrl.startsWith('data:application/pdf')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = doc.fileDataUrl;
+                iframe.className = "w-full h-96 rounded-xl border border-slate-200";
+                mediaContainer.appendChild(iframe);
+            }
+
+            if (doc.content && doc.content.trim().length > 0) {
+                const noteBox = document.createElement('div');
+                noteBox.className = "bg-amber-50/50 border border-amber-100 rounded-xl p-5 text-sm text-slate-800 whitespace-pre-line leading-relaxed font-normal";
+                noteBox.innerText = doc.content;
+                mediaContainer.appendChild(noteBox);
+            } else if (!doc.fileDataUrl) {
+                const blankGuide = document.createElement('div');
+                blankGuide.className = "h-72 border border-dashed border-amber-200 rounded-xl bg-[radial-gradient(#fcd34d_1px,transparent_1px)] [background-size:20px_20px] flex items-center justify-center text-xs text-amber-800/50";
+                blankGuide.innerText = "චිත්‍ර හා සටහන් පුවරුව (Drawing Whiteboard)";
+                mediaContainer.appendChild(blankGuide);
+            }
+        }
+
+        function openPreview(id, startInDrawMode = false) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            activeDocId = id;
+            renderPreviewStage(doc);
+            document.getElementById('previewModal').classList.remove('hidden');
+
+            // Setup Canvas dimensions after modal layout renders
+            requestAnimationFrame(() => {
+                setupCanvasForDoc(doc);
+                setDrawingMode(startInDrawMode);
+            });
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.add('hidden');
+            cancelCanvasText();
+            activeDocId = null;
+        }
+
+        // Interactive HTML5 Canvas Drawing Engine
+        function setupCanvasForDoc(doc) {
+            const stage = document.getElementById('workspaceStage');
+            const canvas = document.getElementById('annotationCanvas');
+            const rect = stage.getBoundingClientRect();
+
+            canvas.width = Math.max(rect.width, 600);
+            canvas.height = Math.max(rect.height, 420);
+
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvasHistory = [];
+
+            if (doc.drawingData) {
+                const img = new Image();
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    pushCanvasHistory();
+                };
+                img.src = doc.drawingData;
+            } else {
+                pushCanvasHistory();
+            }
+        }
+
+        function setDrawingMode(active) {
+            isDrawingMode = active;
+            const toolbar = document.getElementById('drawingToolbar');
+            const canvas = document.getElementById('annotationCanvas');
+            const toggleText = document.getElementById('toggleDrawText');
+            const toggleBtn = document.getElementById('toggleDrawBtn');
+
+            if (isDrawingMode) {
+                toolbar.classList.remove('hidden');
+                canvas.classList.remove('pointer-events-none');
+                canvas.classList.add('cursor-crosshair');
+                toggleText.innerText = "ඇඳීම අවසන් (Done)";
+                toggleBtn.classList.replace('bg-amber-500', 'bg-emerald-500');
+            } else {
+                toolbar.classList.add('hidden');
+                canvas.classList.add('pointer-events-none');
+                canvas.classList.remove('cursor-crosshair');
+                cancelCanvasText();
+                toggleText.innerText = "අඳින්න / සලකුණු කරන්න (Draw)";
+                toggleBtn.classList.replace('bg-emerald-500', 'bg-amber-500');
+            }
+        }
+
+        function toggleDrawingMode() {
+            setDrawingMode(!isDrawingMode);
+        }
+
+        function setDrawTool(tool) {
+            currentTool = tool;
+            cancelCanvasText();
+            document.querySelectorAll('.draw-tool-btn').forEach(btn => {
+                btn.className = "draw-tool-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 text-slate-700 hover:bg-amber-50";
+            });
+            const activeBtn = document.getElementById(`tool-${tool}`);
+            if (activeBtn) {
+                activeBtn.className = "draw-tool-btn active px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 bg-amber-600 text-white";
+            }
+        }
+
+        function setDrawColor(hex) {
+            currentColor = hex;
+            document.querySelectorAll('.color-swatch').forEach(sw => {
+                if (sw.dataset.color === hex) {
+                    sw.classList.add('ring-2', 'ring-offset-1', 'ring-amber-500');
+                } else {
+                    sw.classList.remove('ring-2', 'ring-offset-1', 'ring-amber-500');
+                }
+            });
+        }
+
+        function setStrokeWidth(val) {
+            currentStrokeWidth = Number(val);
+        }
+
+        function getCanvasCoords(e) {
+            const canvas = document.getElementById('annotationCanvas');
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height),
+                cssX: clientX - rect.left,
+                cssY: clientY - rect.top
+            };
+        }
+
+        function initCanvasEvents() {
+            const canvas = document.getElementById('annotationCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const startDraw = (e) => {
+                if (!isDrawingMode) return;
+                const pos = getCanvasCoords(e);
+
+                if (currentTool === 'text') {
+                    pendingTextCoords = { x: pos.x, y: pos.y };
+                    const textBox = document.getElementById('canvasTextBox');
+                    textBox.style.left = `${Math.min(pos.cssX, canvas.clientWidth - 240)}px`;
+                    textBox.style.top = `${Math.min(pos.cssY, canvas.clientHeight - 50)}px`;
+                    textBox.classList.remove('hidden');
+                    document.getElementById('canvasTextInput').focus();
+                    return;
+                }
+
+                isMouseDown = true;
+                startX = pos.x;
+                startY = pos.y;
+                snapshotBeforeShape = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                if (currentTool === 'pen' || currentTool === 'highlighter' || currentTool === 'eraser') {
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                }
+            };
+
+            const moveDraw = (e) => {
+                if (!isMouseDown || !isDrawingMode) return;
+                if (e.cancelable) e.preventDefault();
+                const pos = getCanvasCoords(e);
+
+                if (currentTool === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = currentStrokeWidth * 5;
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                    ctx.globalCompositeOperation = 'source-over';
+                    return;
+                }
+
+                if (currentTool === 'pen') {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.globalAlpha = 1.0;
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentStrokeWidth;
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                    return;
+                }
+
+                if (currentTool === 'highlighter') {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.globalAlpha = 0.28;
+                    ctx.strokeStyle = currentColor === '#0F172A' ? '#FACC15' : currentColor;
+                    ctx.lineWidth = Math.max(currentStrokeWidth * 4, 16);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1.0;
+                    return;
+                }
+
+                // Shape tools restore snapshot before previewing shape
+                ctx.putImageData(snapshotBeforeShape, 0, 0);
+                ctx.globalAlpha = 1.0;
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+                ctx.lineWidth = currentStrokeWidth;
+                ctx.beginPath();
+
+                if (currentTool === 'line') {
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                } else if (currentTool === 'rect') {
+                    ctx.strokeRect(startX, startY, pos.x - startX, pos.y - startY);
+                } else if (currentTool === 'circle') {
+                    const radius = Math.hypot(pos.x - startX, pos.y - startY);
+                    ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                } else if (currentTool === 'arrow') {
+                    drawArrow(ctx, startX, startY, pos.x, pos.y, currentStrokeWidth);
+                }
+            };
+
+            const endDraw = () => {
+                if (!isMouseDown) return;
+                isMouseDown = false;
+                ctx.globalAlpha = 1.0;
+                ctx.globalCompositeOperation = 'source-over';
+                pushCanvasHistory();
+            };
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', moveDraw);
+            window.addEventListener('mouseup', endDraw);
+
+            canvas.addEventListener('touchstart', startDraw, { passive: false });
+            canvas.addEventListener('touchmove', moveDraw, { passive: false });
+            window.addEventListener('touchend', endDraw);
+        }
+
+        function drawArrow(ctx, fromX, fromY, toX, toY, width) {
+            const headLen = Math.max(12, width * 3.5);
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function commitCanvasText() {
+            const input = document.getElementById('canvasTextInput');
+            const text = input.value.trim();
+            if (text) {
+                const canvas = document.getElementById('annotationCanvas');
+                const ctx = canvas.getContext('2d');
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = currentColor;
+                const fontSize = Math.max(16, currentStrokeWidth * 4 + 10);
+                ctx.font = `600 ${fontSize}px 'Noto Sans Sinhala', sans-serif`;
+                ctx.fillText(text, pendingTextCoords.x, pendingTextCoords.y + fontSize * 0.8);
+                pushCanvasHistory();
+            }
+            cancelCanvasText();
+        }
+
+        function cancelCanvasText() {
+            document.getElementById('canvasTextInput').value = '';
+            document.getElementById('canvasTextBox').classList.add('hidden');
+        }
+
+        function pushCanvasHistory() {
+            const canvas = document.getElementById('annotationCanvas');
+            if (canvasHistory.length > 25) canvasHistory.shift();
+            canvasHistory.push(canvas.toDataURL('image/png'));
+        }
+
+        function undoCanvas() {
+            if (canvasHistory.length <= 1) return;
+            canvasHistory.pop();
+            const prevDataUrl = canvasHistory[canvasHistory.length - 1];
+            const canvas = document.getElementById('annotationCanvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = prevDataUrl;
+        }
+
+        function clearCanvas() {
+            const canvas = document.getElementById('annotationCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pushCanvasHistory();
+            showToast("මකා දමන ලදී", "චිත්‍ර පුවරුව පිරිසිදු කරන ලදී.");
+        }
+
+        function saveCanvasAnnotation() {
+            if (activeDocId === null) return;
+            const docIndex = documents.findIndex(d => d.id === activeDocId);
+            if (docIndex === -1) return;
+
+            const canvas = document.getElementById('annotationCanvas');
+            documents[docIndex].drawingData = canvas.toDataURL('image/png');
+            saveDocuments();
+            filterDocuments();
+            showToast("චිත්‍රය සුරකින ලදී!", "ඔබගේ ඇඳීම් සහ සලකුණු මෙම නිබන්ධනයට එක් කරන ලදී.");
+        }
+
+        // Export Annotated Document + Drawing as Combined PNG
+        function downloadAnnotatedPNG() {
+            const doc = documents.find(d => d.id === activeDocId);
+            if (!doc) return;
+
+            const overlayCanvas = document.getElementById('annotationCanvas');
+            const exportCanvas = document.createElement('canvas');
+            exportCanvas.width = overlayCanvas.width;
+            exportCanvas.height = overlayCanvas.height;
+            const ctx = exportCanvas.getContext('2d');
+
+            // Fill warm white background
+            ctx.fillStyle = '#FFFBEB';
+            ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+            // Header stamp
+            ctx.fillStyle = '#78350F';
+            ctx.font = "bold 18px 'Noto Sans Sinhala', sans-serif";
+            ctx.fillText(`බුද්ධ ධර්මය නිබන්ධන (ඩබ්.ඒ.අයි.ශ්‍යාමලී) - ${doc.title}`, 24, 38);
+
+            // Draw content text lines
+            if (doc.content) {
+                ctx.fillStyle = '#1E293B';
+                ctx.font = "14px 'Noto Sans Sinhala', sans-serif";
+                const lines = doc.content.split('\n');
+                let y = 75;
+                lines.forEach(line => {
+                    ctx.fillText(line, 24, y);
+                    y += 24;
+                });
+            }
+
+            // Composite user drawing layer on top
+            ctx.drawImage(overlayCanvas, 0, 0);
+
+            const link = document.createElement('a');
+            link.download = `${doc.title.replace(/\s+/g, '_')}_annotated.png`;
+            link.href = exportCanvas.toDataURL('image/png');
+            link.click();
+            showToast("බාගත විය!", "සටහන් සහිත පිටුව PNG රූපයක් ලෙස බාගත කරන ලදී.");
+        }
+
+        // Download Document File / Text
+        function downloadDoc(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            if (doc.fileDataUrl) {
+                const link = document.createElement('a');
+                link.href = doc.fileDataUrl;
+                link.download = doc.fileName || `${doc.title}`;
+                link.click();
+            } else {
+                const blobContent = `බුද්ධ ධර්මය නිබන්ධන - ඩබ්.ඒ.අයි.ශ්‍යාමලී මිස්\n========================================\nමාතෘකාව: ${doc.title}\nකාණ්ඩය: ${getCategoryLabel(doc.category)}\nදිනය: ${doc.date}\n\nවිස්තරය:\n${doc.desc}\n\nසටහන්:\n${doc.content || ''}`;
+                const blob = new Blob([blobContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${doc.title.replace(/\s+/g, '_')}.txt`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+            showToast("බාගත කිරීම ආරම්භ විය", `"${doc.title}" ගොනුව බාගත වෙමින් පවතී...`);
+        }
+
+        function downloadCurrentDoc() {
+            if (activeDocId !== null) {
+                downloadDoc(activeDocId);
+            }
+        }
+
+        // Toast Notification System
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerText = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
